@@ -40,6 +40,9 @@ else
   }
 end
 
+# A time earlier than anything in the arXiv.
+DateTime.parse('1990-01-01T00:00:00')
+
 
 module Arxiv
 
@@ -47,8 +50,8 @@ module Arxiv
   def self.crawl
     LOG.info 'crawling the arxiv for new articles'
 
-    min_published = Article.maximum(:published)
-    min_updated = Article.maximum(:last_updated)
+    min_published = Article.maximum(:published) || ARXIV_START
+    min_updated = Article.maximum(:last_updated) || ARXIV_START
 
     max_published = min_published
     max_updated = min_updated
