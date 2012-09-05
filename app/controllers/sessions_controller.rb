@@ -10,8 +10,7 @@ class SessionsController < ApplicationController
 
     Logging::log_event('server/login', user, {:provider => params[:provider]})
 
-    redirect_to root_url, \
-        notice: "Hi, #{user[:name]}. You have signed in successfully!"
+    redirect_to root_url + '#'  # ensure there is no hash from the provider
   end
 
   def destroy
