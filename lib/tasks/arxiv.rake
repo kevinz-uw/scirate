@@ -11,6 +11,6 @@ namespace :arxiv do
     Arxiv::crawl
 
     end_time = Time.now
-    Logging::LogEvent('task/arxiv/crawl', nil, end_time - start_time, {})
+    Logging::log_event('task/arxiv/crawl', nil, end_time - start_time, {})
   end
 end

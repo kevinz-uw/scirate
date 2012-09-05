@@ -9,7 +9,7 @@ namespace :recommender do
     Recommenders::update_user_models
 
     end_time = Time.now
-    Logging::LogEvent('task/recommender/update_users', nil,
+    Logging::log_event('task/recommender/update_users', nil,
         end_time - start_time, {})
   end
 
@@ -20,7 +20,7 @@ namespace :recommender do
     Recommenders::update_global_model
 
     end_time = Time.now
-    Logging::LogEvent('task/recommender/update_global', nil,
+    Logging::log_event('task/recommender/update_global', nil,
         end_time - start_time, {})
   end
 end
