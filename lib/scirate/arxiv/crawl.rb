@@ -41,7 +41,7 @@ else
 end
 
 # A time earlier than anything in the arXiv.
-DateTime.parse('1990-01-01T00:00:00')
+ARXIV_START = DateTime.parse('1990-01-01T00:00:00')
 
 
 module Arxiv
