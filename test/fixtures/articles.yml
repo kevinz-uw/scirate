@@ -1,0 +1,29 @@
+one:
+  arxiv_id: "0911.5596"
+  title: "Spin Systems and Computational Complexity"
+  abstract: "I give a very brief non-technical introduction to ..."
+  comments: "3 pages, prepared for a special issue of Physics in Canada"
+  doi: 
+  journal_ref: "Physics in Canada, vol. 66, no. 2, pp. 87-79, 2010"
+  report_no: 
+  submitter: 
+  primary_category: "quant-ph"
+  msc_class: 
+  acm_class: 
+  published: 2009-11-30 12:00:00 UTC
+  last_updated: 2009-11-30 12:00:00 UTC
+
+two:
+  arxiv_id: "1201.4867"
+  title: "Efficient classical simulations of quantum Fourier transforms and normalizer circuits over Abelian groups"
+  abstract: "The quantum Fourier transform (QFT) is sometimes said to be ..."
+  comments: "23 pages + appendices"
+  doi: 
+  journal_ref: 
+  report_no: 
+  submitter: 
+  primary_category: "quant-ph"
+  msc_class: 
+  acm_class: 
+  published: 2012-01-23 12:00:00 UTC
+  last_updated: 2012-01-23 12:00:00 UTC

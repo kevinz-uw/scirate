@@ -1,0 +1,41 @@
+// Color scheme;
+//    primary		#172CAF #4B5ED7 #707ED7 #2E3983 #071672
+//    secondary A 	#FFDF00 #BFAE30 #A69100 #FFE740 #FFEE73
+//    secondary B 	#FF8700 #BF7C30 #A65800 #FFA540 #FFBD73
+// (order is middle, left top, left bottom, right top, right bottom)
+
+$navbarBackground: #071672;
+$navbarBackgroundHighlight: #172CAF;
+$navbarLinkColor: #FFFFFF;
+
+$linkColor: #172CAF;
+
+@import "bootstrap";
+
+BODY {
+  padding-top: 60px;
+  background-color: #e8e8e8;
+}
+
+DIV.content-area {
+  background-color: white;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+// Use secondary B for headings. (Secondary A is for small banners & tabs.)
+H1 { color: #FF8700; }
+H2 { color: #BF7C30; }
+H3 { color: #A65800; }
+H4 { color: #FFA540; }
+H5 { color: #FFBD73; }
+
+SPAN.label-highlight { background-color: #FFE740; }
+
+// Add a class for underlined links.
+A.link { text-decoration: underline; }
+
+// Always set the widths in tables displaying data, so we never overflow.
+TABLE.table { table-layout: fixed; }
+
+@import "bootstrap-responsive";

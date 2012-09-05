@@ -1,0 +1,60 @@
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <a class="btn btn-navbar"
+         data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+
+      <a class="brand pull-left" href="/">SciRate</a>
+
+      <div class="nav-collapse">
+        <ul class="nav pull-left">
+          <li class="active"><a href="/">Home</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+              >Help <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="/about" target="_blank">About</a></li>
+              <li><a href="/privacy" target="_blank">Privacy policy</a></li>
+              <li><a href="/faq" target="_blank">FAQ</a></li>
+            </ul>
+          </li>
+        </ul>
+
+        <ul class="nav pull-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+              ><%= current_user.name %> <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="#settings">Settings</a></li>
+              <li><a href="#report_bug">Report a bug</a></li>
+              <li><a href="/signout">Sign out</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="span10 offset1" id="alert-area">
+    </div>
+
+    <div class="span10 offset1 content-area" id="content-area">
+      <div style="padding: 60px;"><b>Loading&hellip;</b></div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  var userName = <%= @current_user.name.to_json.html_safe %>;
+  var userEmail = <%= @current_user.email.to_json.html_safe %>;
+  var userAllowEmail = <%= @current_user.allow_email.to_json.html_safe %>;
+  var userInterests = <%= @interests.to_json.html_safe %>;
+</script>
+<%= javascript_include_tag "client" %>

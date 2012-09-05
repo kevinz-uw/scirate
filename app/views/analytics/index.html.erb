@@ -1,0 +1,394 @@
+<div class="container" style="margin-top: -50px;">
+  <div style="display: none;" id="tf">
+    <div class="btn-group" style="float: right">
+      <a class="btn dropdown-toggle" data-toggle="dropdown"
+         href="#"><%= @timeframe_str %> <span class="caret"></span></a>
+      <ul class="dropdown-menu" id="tf-dropdown">
+        <li><a href="/analytics?tf=day">Last 24 hours</a></li>
+        <li><a href="/analytics?tf=week">Last 7 days</a></li>
+        <li><a href="/analytics?tf=month">Last 30 days</a></li>
+      </ul>
+    </div>
+    <label style="float: right; margin: 5px 10px 0 0;">Time frame:</label>
+  </div>
+</div>
+
+<% if @client_error_total > 0 %>
+  <div class="container-fluid" style="margin-top: 10px;">
+    <div class="row">
+      <div class="span10 offset1">
+        <div class="alert alert-error">
+          <strong>Uh oh!</strong> There has been <%= @client_error_total %>
+          internal error(s) reported by clients.
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<div class="container-fluid" style="margin-top: 10px;">
+  <div class="row">
+    <div class="span10 offset1 content-area">
+      <ul class="nav nav-tabs" id="tabs">
+        <li class="active"><a href="#users" id="users-tab">Users</a></li>
+        <li><a href="#categories" id="categories-tab">Categories</a></li>
+        <li><a href="#client" id="client-tab">Client Activity</a></li>
+        <li><a href="#server" id="server-tab">Server Activity</a></li>
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane active" id="users">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th></th>
+                <th>Total</th>
+                <th>Avg Per User</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Users</td>
+                <td></td>
+                <td><%= @num_users %></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td rowspan="2">Interests</td>
+                <td>Primary</td>
+                <td><%= @num_primary_interests %></td>
+                <td><%= FormatRatio(@num_primary_interests, @num_users) %></td>
+              </tr>
+              <tr>
+                <td>Secondary</td>
+                <td><%= @num_secondary_interests %></td>
+                <td><%= FormatRatio(@num_secondary_interests, @num_users) %></td>
+              </tr>
+              <tr>
+                <td rowspan="5">Ratings</td>
+                <td>Total</td>
+                <td><%= @num_ratings %></td>
+                <td><%= FormatRatio(@num_ratings, @num_users) %></td>
+              </tr>
+              <tr>
+                <td>Scited</td>
+                <td><%= @num_scite_ratings %></td>
+                <td><%= FormatRatio(@num_scite_ratings, @num_users) %></td>
+              </tr>
+              <tr>
+                <td>Arxiv link clicked</td>
+                <td><%= @num_arxiv_ratings %></td>
+                <td><%= FormatRatio(@num_arxiv_ratings, @num_users) %></td>
+              </tr>
+              <tr>
+                <td>Expanded</td>
+                <td><%= @num_expand_ratings %></td>
+                <td><%= FormatRatio(@num_expand_ratings, @num_users) %></td>
+              </tr>
+              <tr>
+                <td>Dislike</td>
+                <td><%= @num_dislike_ratings %></td>
+                <td><%= FormatRatio(@num_dislike_ratings, @num_users) %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="tab-pane" id="categories">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Users (as primary)</th>
+                <th>Users (as secondary)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @categories.each do |cat| %>
+              <tr>
+                <td><%= cat[:name] %></td>
+                <td><%= cat[:primary_users] %></td>
+                <td><%= cat[:secondary_users] %></td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="tab-pane" id="client">
+          <h2>Pages</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Page</th>
+                <th>Total Views</th>
+                <th>Distinct Users</th>
+                <th>Views Per User</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>page load</td>
+                <td><%= @client_load_total %></td>
+                <td><%= @client_load_users %></td>
+                <td><%= FormatRatio(@client_load_total,
+                            @client_load_users) %></td>
+              </tr>
+              <tr>
+                <td>settings</td>
+                <td><%= @client_settings_total %></td>
+                <td><%= @client_settings_users %></td>
+                <td><%= FormatRatio(@client_settings_total,
+                            @client_settings_users) %></td>
+              </tr>
+              <tr>
+                <td>new</td>
+                <td><%= @client_new_total %></td>
+                <td><%= @client_new_users %></td>
+                <td><%= FormatRatio(@client_new_total,
+                            @client_new_users) %></td>
+              </tr>
+              <tr>
+                <td>browse</td>
+                <td><%= @client_browse_total %></td>
+                <td><%= @client_browse_users %></td>
+                <td><%= FormatRatio(@client_browse_total,
+                            @client_browse_users) %></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>View New</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Average Value</th>
+                <th>Average Percentage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>available</td>
+                <td><%= FormatRatio(@new_total_sum, @client_new_total) %></td>
+                <td><%= FormatRatio(@new_total_sum, @new_total_sum) %></td>
+              </tr>
+              <tr>
+                <td>seen</td>
+                <td><%= FormatRatio(@new_seen_sum, @client_new_total) %></td>
+                <td><%= FormatRatio(@new_seen_sum, @new_total_sum) %></td>
+              </tr>
+              <tr>
+                <td>scited</td>
+                <td><%= FormatRatio(@new_scited_sum, @client_new_total) %></td>
+                <td><%= FormatRatio(@new_scited_sum, @new_total_sum) %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="tab-pane" id="server">
+          <h2>Logins</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Provider</th>
+                <th>Total Logins</th>
+                <th>Distinct Users</th>
+                <th>Logins Per User</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Google</td>
+                <td><%= @logins_gp_total %></td>
+                <td><%= @logins_gp_users %></td>
+                <td><%= FormatRatio(@logins_gp_total, @logins_gp_users) %></td>
+              </tr>
+              <tr>
+                <td>Facebook</td>
+                <td><%= @logins_fb_total %></td>
+                <td><%= @logins_fb_users %></td>
+                <td><%= FormatRatio(@logins_fb_total, @logins_fb_users) %></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>Requests</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Page</th>
+                <th>Total Requests</th>
+                <th>Distinct Users</th>
+                <th>Requests Per User</th>
+                <th>Average Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>home#welcome</td>
+                <td><%= @server_home_welcome_total %></td>
+                <td><%= @server_home_welcome_users %></td>
+                <td><%= FormatRatio(@server_home_welcome_total,
+                            @server_home_welcome_users) %></td>
+                <% if @server_home_welcome_duration %>
+                <td><%= FormatFloat(@server_home_welcome_duration * 1000) %>
+                    ms</td>
+                <% else %>
+                <td></td>
+                <% end %>
+              </tr>
+              <tr>
+                <td>home#index</td>
+                <td><%= @server_home_index_total %></td>
+                <td><%= @server_home_index_users %></td>
+                <td><%= FormatRatio(@server_home_index_total,
+                            @server_home_index_users) %></td>
+                <% if @server_home_index_duration %>
+                <td><%= FormatFloat(@server_home_index_duration * 1000) %>
+                    ms</td>
+                <% else %>
+                <td></td>
+                <% end %>
+              </tr>
+              <tr>
+                <td>articles#index</td>
+                <td><%= @server_articles_index_total %></td>
+                <td><%= @server_articles_index_users %></td>
+                <td><%= FormatRatio(@server_articles_index_total,
+                            @server_articles_index_users) %></td>
+                <% if @server_articles_index_duration %>
+                <td><%= FormatFloat(@server_articles_index_duration * 1000) %>
+                    ms</td>
+                <% else %>
+                <td></td>
+                <% end %>
+              </tr>
+              <tr>
+                <td>interests#index</td>
+                <td><%= @server_interests_index_total %></td>
+                <td><%= @server_interests_index_users %></td>
+                <td><%= FormatRatio(@server_interests_index_total,
+                            @server_interests_index_users) %></td>
+                <% if @server_interests_index_duration %>
+                <td><%= FormatFloat(@server_interests_index_duration * 1000) %>
+                    ms</td>
+                <% else %>
+                <td></td>
+                <% end %>
+              </tr>
+              <tr>
+                <td>interests#create</td>
+                <td><%= @server_interests_create_total %></td>
+                <td><%= @server_interests_create_users %></td>
+                <td><%= FormatRatio(@server_interests_create_total,
+                            @server_interests_create_users) %></td>
+                <% if @server_interests_create_duration %>
+                <td><%= FormatFloat(@server_interests_create_duration * 1000) %>
+                    ms</td>
+                <% else %>
+                <td></td>
+                <% end %>
+              </tr>
+              <tr>
+                <td>interests#update</td>
+                <td><%= @server_interests_update_total %></td>
+                <td><%= @server_interests_update_users %></td>
+                <td><%= FormatRatio(@server_interests_update_total,
+                            @server_interests_update_users) %></td>
+                <% if @server_interests_update_duration %>
+                <td><%= FormatFloat(@server_interests_update_duration * 1000) %>
+                    ms</td>
+                <% else %>
+                <td></td>
+                <% end %>
+              </tr>
+              <tr>
+                <td>interests#destroy</td>
+                <td><%= @server_interests_destroy_total %></td>
+                <td><%= @server_interests_destroy_users %></td>
+                <td><%= FormatRatio(@server_interests_destroy_total,
+                            @server_interests_destroy_users) %></td>
+                <% if @server_interests_destroy_duration %>
+                <td><%= FormatFloat(@server_interests_destroy_duration * 1000)%>
+                    ms</td>
+                <% else %>
+                <td></td>
+                <% end %>
+              </tr>
+              <tr>
+                <td>ratings#create</td>
+                <td><%= @server_ratings_create_total %></td>
+                <td><%= @server_ratings_create_users %></td>
+                <td><%= FormatRatio(@server_ratings_create_total,
+                            @server_ratings_create_users) %></td>
+                <% if @server_ratings_create_duration %>
+                <td><%= FormatFloat(@server_ratings_create_duration * 1000) %>
+                    ms</td>
+                <% else %>
+                <td></td>
+                <% end %>
+              </tr>
+              <tr>
+                <td>users#update</td>
+                <td><%= @server_users_update_total %></td>
+                <td><%= @server_users_update_users %></td>
+                <td><%= FormatRatio(@server_users_update_total,
+                            @server_users_update_users) %></td>
+                <% if @server_users_update_duration %>
+                <td><%= FormatFloat(@server_users_update_duration * 1000) %>
+                    ms</td>
+                <% else %>
+                <td></td>
+                <% end %>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>Tasks</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Occurrances</th>
+                <th>Average Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>ArXiv crawl</td>
+                <td><%= @tasks_crawl_total %></td>
+                <% if @tasks_crawl_duration %>
+                <td><%= FormatFloat(@tasks_crawl_duration) %> s</td>
+                <% else %>
+                <td></td>
+                <% end %>
+              </tr>
+              <tr>
+                <td>Update User Models</td>
+                <td><%= @tasks_recommender_users_total %></td>
+                <% if @tasks_recommender_users_duration %>
+                <td><%= FormatFloat(@tasks_recommender_users_duration) %> s</td>
+                <% else %>
+                <td></td>
+                <% end %>
+              </tr>
+              <tr>
+                <td>Update Global Model</td>
+                <td><%= @tasks_recommender_global_total %></td>
+                <% if @tasks_recommender_global_duration %>
+                <td><%= FormatFloat(@tasks_recommender_global_duration)%> s</td>
+                <% else %>
+                <td></td>
+                <% end %>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+    </div>
+  </div>
+</div>
+
+<%= javascript_include_tag "analytics" %>

@@ -1,0 +1,7 @@
+one_category1:
+  name: "quant-ph"
+  article_id: <%= ActiveRecord::Fixtures.identify(:one) %>
+
+two_category1:
+  name: "quant-ph"
+  article_id: <%= ActiveRecord::Fixtures.identify(:two) %>

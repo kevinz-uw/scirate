@@ -1,0 +1,32 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="span10 offset1 content-area" id="content-area">
+      <H1 style="margin-bottom: 20px;">Welcome to SciRate</H1>
+
+      <P>SciRate is an application that makes it easier to stay up-to-date with
+      the papers that interest you on the <A href="arxiv.org">arXiv</A>.</P>
+
+      <H3>More information</H3>
+      <UL>
+	<LI>SciRate uses CSS 3 and other features of modern browsers, so we
+          require a recent version of Chrome, Firefox, or Safari.</LI>
+
+	<LI>Read our <A href="/privacy">privacy policy</A> for details about
+          what information we collect.</LI>
+
+	<LI>Read the <A href="/faq">FAQ</A> for answers to some common
+          questions.</LI>
+
+	<LI>Read the <A href="/about">about page</A> to learn about the people
+          who created this site.</LI>
+      </UL>
+
+      <H3>Get Started</H3>
+      <P><B>Sign in</B> with
+        <%= link_to 'Google', '/auth/google_oauth2' %> or
+        <%= link_to 'Facebook', '/auth/facebook' %>.
+      </P>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,9 @@
+crawl_one:
+  finished: 2009-12-01 12:00:00 UTC
+  max_published: 2009-11-30 12:00:00 UTC
+  max_updated: 2009-11-30 12:00:00 UTC
+
+crawl_two:
+  finished: 2012-01-24 12:00:00 UTC
+  max_published: 2012-01-23 12:00:00 UTC
+  max_updated: 2012-01-23 12:00:00 UTC
