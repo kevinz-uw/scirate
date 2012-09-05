@@ -2,11 +2,14 @@ source 'https://rubygems.org'
 
 gem 'rails'
 
+# Heroku recommends this web server.
+gem 'thin'
+
 # Use postgres for development and production but not testing.
 gem 'pg'
-#group :testing do
-#  gem 'sqlite3'
-#end
+group :test do
+  gem 'sqlite3'
+end
 
 # Support serving JSON to the client.
 gem 'json'
