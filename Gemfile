@@ -4,9 +4,9 @@ gem 'rails'
 
 # Use postgres for development and production but not testing.
 gem 'pg'
-group :testing do
-  gem 'sqlite3'
-end
+#group :testing do
+#  gem 'sqlite3'
+#end
 
 # Support serving JSON to the client.
 gem 'json'
