@@ -14,12 +14,12 @@ module Recommenders
       if ratings.length == 0
         return NaiveBayes.new({})
       end
-  
+
       article_scited = {}
       ratings.each do |r|
         article_scited[r.article_id] = (r.action == RATING_ACTION_SCITE)
       end
-  
+
       # Determine the overall frequency of sciting.
       scite_count = noscite_count = 0
       article_scited.each do |a, v|
@@ -49,7 +49,7 @@ module Recommenders
           end
         end
       end
-  
+
       # Return a description of this model.
       params = {'__prior__' => log_odds(scite_count, noscite_count)}
       words.each do |w|
@@ -60,6 +60,10 @@ module Recommenders
 
     # Returns the log-odds ratio of sciting this article.
     def scite_odds(article)
+      if ! @params.include? '__prior__'  # empty model
+        return 0
+      end
+
       s = @params['__prior__']
       Keyword.all_from(article).each do |k|
         if @params.include? k.word
