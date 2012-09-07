@@ -1,0 +1,7 @@
+<div class="alert alert-error">
+  <button type="button" class="close" data-dismiss="alert">×</button>
+  <strong>Doh!</strong> You discovered an error in the software:
+  <code>{{>message}}</code>. We have recorded the error and will work
+  on fixing the problem. If you encounter this error repeatedly, you
+  may need to wait for this to be fixed before continuing.
+</div>

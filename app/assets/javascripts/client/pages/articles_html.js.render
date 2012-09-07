@@ -1,0 +1,6 @@
+<div id="{{>headerID}}">
+</div>
+<div id="{{>resultsID}}">
+  <p><b>Loading &hellip;</b></p>
+</div>
+<div id="{{>pagerID}}"></div>

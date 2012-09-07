@@ -9,7 +9,7 @@ $.extend(NewPage.prototype, ArticlesPage.prototype);
 
 NewPage.prototype.displayHeader = function(elem, firstIndex, lastIndex) {
   this.lastIndex = lastIndex;
-  elem.html(_newHeaderTemplate.render({
+  elem.html(newHeaderTemplate.render({
     category: this.category,
     first_index: firstIndex + 1,
     last_index: lastIndex + 1,
@@ -18,7 +18,7 @@ NewPage.prototype.displayHeader = function(elem, firstIndex, lastIndex) {
 };
 
 NewPage.prototype.displayPager = function(elem, firstIndex, lastIndex, atEnd) {
-  elem.html(_newPagerTemplate.render({
+  elem.html(newPagerTemplate.render({
     category: this.category,
     first_index: firstIndex + 1,
     last_index: lastIndex + 1,
@@ -98,7 +98,7 @@ NewPage.prototype.skip = function() {
 
 // Congratulates the user on getting up to date.
 NewPage.prototype.showWinMessage = function () {
-  $('#alert-area').append(_winTemplate.render({
+  $('#alert-area').append(newAlertTemplate.render({
     treat: Math.floor(Math.random() * 4)
   }));
 };
@@ -113,51 +113,3 @@ NewPage.countScited = function(articles) {
   }
   return count;
 };
-
-// TODO: move these to new files.
-var _newHeaderTemplate = $.templates(
-    '<h1 style="font-size: 24px;">\n' + 
-    'New Articles {{>first_index}} &ndash; {{>last_index}} of {{>length}}' +
-    ' in {{>category}}\n' +
-    '</h1>');
-
-var _newPagerTemplate = $.templates(
-    '<ul class="pager">' +
-    '  {{if first_index != 1}}\n' +
-    '  <li class="previous">\n' +
-    '    <a href="#new/{{>category}}/{{>prev_index}}"\n' +
-    '       id="articles_prev">&larr; Previous</a>\n' +
-    '  </li>\n' +
-    '  {{/if}}\n' +
-    '  {{if last_index != length}}\n' +
-    '  <li class="next">\n' +
-    '    <a href="#new/{{>category}}/{{>last_index}}"\n' +
-    '       id="articles_next">Next &rarr;</a>\n' +
-    '  </li>\n' +
-    '  <li class="next">\n' +
-    '    <a href="#" id="articles_skip"' +
-          ' style="margin-right: 20px;">Skip ' +
-          '{{>last_index+1}}&ndash;{{>length}}</a>\n' +
-    '  </li>\n' +
-    '  {{else}}\n' +
-    '  <li class="next">\n' +
-    '    <a href="#" id="articles_done">Done</a>\n' +
-    '  </li>\n' +
-    '  {{/if}}\n' +
-    '</ul>');
-
-var _winTemplate = $.templates(
-    '<div class="alert alert-success">' +
-    '<button type="button" class="close" data-dismiss="alert">×</button>' +
-    '<strong>Congratulations!</strong> You are completely up to date. ' +
-    '{{if treat == 0}}' +
-    '  You deserve a cookie.' +
-    '{{else if treat == 1}}' +
-    '  Enjoy a relaxing walk.' +
-    '{{else if treat == 2}}' +
-    '  Is it coffee time now?' +
-    '{{else if treat == 3}}' +
-    '  I wish I could be more like you... I mean, if I wasn\'t a computer.' +
-    '{{else}}' +
-    '{{/if}}' +
-    '</div>');

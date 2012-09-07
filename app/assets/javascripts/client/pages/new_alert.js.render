@@ -1,0 +1,14 @@
+<div class="alert alert-success">
+<button type="button" class="close" data-dismiss="alert">×</button>
+<strong>Congratulations!</strong> You are completely up to date.
+{{if treat == 0}}
+  You deserve a cookie.
+{{else if treat == 1}}
+  Enjoy a relaxing walk.
+{{else if treat == 2}}
+  Is it coffee time now?
+{{else if treat == 3}}
+  I wish I could be more like you... I mean, if I wasn\'t a computer.
+{{else}}
+{{/if}}
+</div>

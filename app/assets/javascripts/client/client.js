@@ -71,36 +71,17 @@ function getAuthData() {
 
 // Notifies the user of an error contacting the server.
 function unexpectedServerError(xhr, statusText, errorThrown) {
-  $('#alert-area').append(_serverErrorTemplate.render({
+  $('#alert-area').append(errorServerTemplate.render({
     statusText: statusText
   }));
 }
 
 // Notifies the server and user of an internal error.
 function unexpectedException(ex) {
-  $('#alert-area').append(_internalErrorTemplate.render({
+  $('#alert-area').append(errorInternalTemplate.render({
     message: ex.message
   }));
 
   LogEvent('client/error', undefined,
       {'browser': browserName(), 'stack': ex.stack});
 }
-
-// TODO: move this to a separate file
-var _serverErrorTemplate = $.templates(
-    '<div class="alert alert-error">' +
-      '<button type="button" class="close" data-dismiss="alert">×</button>' +
-      '<strong>Uh oh&hellip;</strong> The server returned an error: ' +
-      '<code>{{>statusText}}</code>. We are working on fixing the problem. ' +
-      'If you encounter this error repeatedly, you may need to wait for this ' +
-      'to be fixed before continuing.' +
-    '</div>');
-
-var _internalErrorTemplate = $.templates(
-    '<div class="alert alert-error">' +
-      '<button type="button" class="close" data-dismiss="alert">×</button>' +
-      '<strong>Doh!</strong> You discovered an error in the software: ' +
-      '<code>{{>message}}</code>. We have recorded the error and will work ' +
-      'on fixing the problem. If you encounter this error repeatedly, you ' +
-      'may need to wait for this to be fixed before continuing.' +
-    '</div>');

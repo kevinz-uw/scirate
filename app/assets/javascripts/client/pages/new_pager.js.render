@@ -1,0 +1,23 @@
+<ul class="pager">
+  {{if first_index != 1}}
+  <li class="previous">
+    <a href="#new/{{>category}}/{{>prev_index}}"
+       id="articles_prev">&larr; Previous</a>
+  </li>
+  {{/if}}
+
+  {{if last_index != length}}
+  <li class="next">
+    <a href="#new/{{>category}}/{{>last_index}}"
+       id="articles_next">Next &rarr;</a>
+  </li>
+  <li class="next">
+    <a href="#" id="articles_skip"
+       style="margin-right: 20px;">Skip {{>last_index+1}}&ndash;{{>length}}</a>
+  </li>
+  {{else}}
+  <li class="next">
+    <a href="#" id="articles_done">Done</a>
+  </li>
+  {{/if}}
+</ul>

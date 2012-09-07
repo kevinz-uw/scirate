@@ -24,7 +24,7 @@ HomePage.prototype.display = function() {
       hasSecondary = true;
     }
   }
-  this.root.html(_homeTemplate.render({
+  this.root.html(homeHtmlTemplate.render({
     interests: this.interests,
     has_primary: hasPrimary,
     has_secondary: hasSecondary,
@@ -36,39 +36,3 @@ HomePage.prototype.attach = function() {
 
 HomePage.prototype.detach = function() {
 };
-
-// TODO: move this to a new file.
-var _homeTemplate = $.templates(
-    '<h1>Interests</h1>' +
-    '{{if has_primary}}' +
-    '<h3 style="margin-top: 10px;">Primary</h3>' +
-    '{{for interests}}' +
-      '{{if primary}}' +
-      '<div>' +
-        '<div>' +
-          '<b>{{>category}}</b>: ' +
-          '{{if new_count > 0}}' +
-          'Last read {{>last_seen_str}}. ' +
-          '<a class="link" href="#new/{{>category}}/{{>new_index}}"' +
-            '>view {{>new_count - new_index}} new</a> or ' +
-          '<a class="link" href="#browse/{{>category}}">browse</a>' +
-          '{{else}}' +
-          'No new articles. ' +
-          '<a class="link" href="#browse/{{>category}}">browse</a>' +
-          '{{/if}}' +
-        '</div>' +
-      '</div>' +
-      '{{/if}}' +
-    '{{/for}}' +
-    '{{/if}}' +
-    '{{if has_secondary}}' +
-    '<h3 style="margin-top: 10px;">Secondary</h3>' +
-    '{{for interests}}' +
-      '{{if !primary}}' +
-      '<div>' +
-        '{{>category}}: ' +
-        '<a class="link" href="#browse/{{>category}}">browse</a>' +
-      '</div>' +
-      '{{/if}}' +
-    '{{/for}}' +
-    '{{/if}}');

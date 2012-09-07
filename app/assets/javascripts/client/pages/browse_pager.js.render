@@ -1,0 +1,20 @@
+<ul class="pager">
+  <li class="previous">
+    <a href="#" id="articles_home"
+       style="margin-right: 20px;">Home</a>
+  </li>
+
+  {{if first_index != 1}}
+  <li class="previous">
+    <a href="{{>prev_url}}"
+       id="articles_prev">&larr; Previous</a>
+  </li>
+  {{/if}}
+
+  {{if !atEnd}}
+  <li class="next">
+    <a href="{{>next_url}}"
+       id="articles_next">Next &rarr;</a>
+  </li>
+  {{/if}}
+</ul>

@@ -9,7 +9,7 @@ ArticlesPage.prototype.initArticles = function(root, cursor) {
 };
 
 ArticlesPage.prototype.display = function() {
-  this.root.html(_articlesTemplate.render({
+  this.root.html(articlesHtmlTemplate.render({
     headerID: 'header', pagerID: 'pager', resultsID: 'results'
   }));
 
@@ -18,7 +18,7 @@ ArticlesPage.prototype.display = function() {
 
     this.displayHeader($('#header'), this.firstIndex, this.lastIndex);
     this.displayPager($('#pager'), this.firstIndex, this.lastIndex, this.atEnd);
-    $('#results').html(_resultsTemplate.render({
+    $('#results').html(articlesResultsTemplate.render({
       articles: this.cursor.articles.slice(this.firstIndex, this.lastIndex + 1)
     }));
   } else {
@@ -53,7 +53,7 @@ ArticlesPage.prototype._maxVisibleResults = function() {
   div.css('position', 'absolute');
   div.css('top', '0');
   div.css('left', '-10000px');
-  div.html(_articlesTemplate.render({
+  div.html(articlesHtmlTemplate.render({
     category: this.category,
     headerID: 'header2', pagerID: 'pager2', resultsID: 'results2',
   }));
@@ -63,13 +63,13 @@ ArticlesPage.prototype._maxVisibleResults = function() {
 
   // Measure the height of a results display with a single element.
   var resultsElem = $('#results2');
-  resultsElem.html(_resultsTemplate.render({
+  resultsElem.html(articlesResultsTemplate.render({
     articles: [this.cursor.articles[0]]
   }));
   var height1 = div.height();
 
   // Measure the height of a results display with two elements.
-  resultsElem.html(_resultsTemplate.render({
+  resultsElem.html(articlesResultsTemplate.render({
     articles: [this.cursor.articles[0], this.cursor.articles[1]]
   }));
   var height2 = div.height();
@@ -159,46 +159,3 @@ ArticlesPage.prototype.rate = function(article, rating) {
     }).success($.noop)
     .error(unexpectedServerError);
 };
-
-// TODO: move these to new files.
-var _articlesTemplate = $.templates(
-    '<div id="{{>headerID}}">' +
-    '</div>' +
-    '<div id="{{>resultsID}}">' +
-    '  <p><b>Loading &hellip;</b></p>' +
-    '</div>' +
-    '<div id="{{>pagerID}}"></div>');
-
-var _resultsTemplate = $.templates(
-    '<dl>\n' +
-    '  {{for articles}}\n' +
-    '  <dt style="margin-top: 10px;">\n' +
-    '    <a href="http://www.arxiv.org/abs/{{>arxiv_id}}"\n' +
-    '       class="arxiv" data-article="{{>id}}"\n' +
-    '       target="_blank">{{>arxiv_id}}</a></td>\n' +
-    '    {{>title}}\n' +
-    '    {{if scited}}\n' +
-    '      <span class="label label-highlight">\n' +
-    '        <i class="icon-thumbs-up"></i></span>\n' +
-    '    {{/if}}\n' +
-    '  </dt>\n' +
-    '  <dd>\n' +
-    '    Authors: {{> ~join(~pluck(authors, "name"), ", ")}}</br>\n' +
-    '    {{if expanded}}\n' +
-    '      <a class="collapse" href="#" data-article="{{>id}}">\n' +
-    '        <i class="icon-chevron-up"></i> Collapse</a>\n' +
-    '      <a class="scite" href="#" data-article="{{>id}}">\n' +
-    '        <i class="icon-thumbs-up"></i> Interesting</a>\n' +
-    '      <a class="unscite" href="#" data-article="{{>id}}">\n' +
-    '        <i class="icon-thumbs-down"></i> Dislike</a>' +
-            ' (only affects me)<br>\n' +
-    '      Abstract: {{>abstract}}\n' +
-    '    {{else}}\n' +
-    '      <a class="expand" href="#" data-article="{{>id}}">\n' +
-    '        <i class="icon-chevron-down"></i> Expand</a>\n' +
-    '      <a class="scite" href="#" data-article="{{>id}}">\n' +
-    '        <i class="icon-thumbs-up"></i> Interesting</a>\n' +
-    '    {{/if}}\n' +
-    '  </dd>\n' +
-    '  {{/for}}\n' +
-    '</dl>\n');
