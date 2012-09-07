@@ -1,10 +1,10 @@
 class StaffMailer < ActionMailer::Base
-  default :from => 'scirate.staff@gmail.com'
+  default :from => ENV['MAIL_ADDRESS']
 
   def report_bug(user, browser, description)
     @user = user
     @browser = browser
     @description = description
-    mail(:to => 'scirate.staff@gmail.com', :subject => 'Bug Report')
+    mail(:to => ENV['MAIL_ADDRESS'], :subject => 'Bug Report')
   end
 end

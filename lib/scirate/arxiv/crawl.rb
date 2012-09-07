@@ -20,6 +20,9 @@ ARXIV_RESUME_SEC = 20
 SINGLETON_STR_FIELDS = %w{title abstract submitter comments doi journal-ref
     msc-class acm-class report-no}
 
+# Fields whose value can be arbitrarily long.
+LONG_FIELDS = %w{title abstract comments}
+
 # Fields returned by arxiv that we currently ignore.
 IGNORED_FIELDS = %w{license proxy}
 
@@ -256,7 +259,13 @@ module Arxiv
       if SINGLETON_STR_FIELDS.include? elem.name
         fatal "repeated singleton field #{elem.name}" \
             if record.include? elem.name
-        record[elem.name.gsub('-', '_').to_sym] = elem.content.strip
+        key = elem.name.gsub('-', '_')
+        value = elem.content.strip
+        if (! LONG_FIELDS.include? key) and (value.length > 255)
+          $stderr.puts "Entry too long: #{key}='#{value}'"
+          value = value[0..250] + '...'
+        end
+        record[key.to_sym] = value
       elsif 'id' == elem.name
         fatal "repeated singleton field #{elem.name}" \
             if record.include? 'arxiv_id'

@@ -31,7 +31,7 @@ class InterestsController < ApplicationController
     # Start out assuming all of the last crawl is new.
     if Crawl.count >= 2
       interest.last_seen = Crawl.order('finished DESC')[1].finished \
-          .advance(:minutes => 1)
+          .advance(:seconds => 1)
     else
       interest.last_seen = DateTime.parse('2000-01-01T00:00:00')
     end
