@@ -3,7 +3,6 @@ function HomePage(root, params) {
 
   // Annotate the interests with a string description of the 'last_seen' time.
   this.interests = data.user.interests;
-  var now = new Date();
   for (var i = 0; i < this.interests.length; i++) {
     if (this.interests[i].last_seen) {
       var last_seen = this.interests[i].last_seen_date;

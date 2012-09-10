@@ -56,5 +56,6 @@
   var userEmail = <%= @current_user.email.to_json.html_safe %>;
   var userAllowEmail = <%= @current_user.allow_email.to_json.html_safe %>;
   var userInterests = <%= @interests.to_json.html_safe %>;
+  var now = new Date(1000 * <%= Time.now.to_i %>);
 </script>
 <%= javascript_include_tag "client" %>
