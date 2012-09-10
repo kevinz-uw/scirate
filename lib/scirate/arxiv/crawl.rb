@@ -83,8 +83,7 @@ module Arxiv
       end
 
       if not article.is_identical? record
-        article.delete
-        article = Article.new(parse_arxiv_record(node))
+        article.update_attributes parse_arxiv_record(node)
         if not article.save
           print_article_errors(article)
         end
