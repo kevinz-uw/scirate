@@ -83,6 +83,9 @@ module Arxiv
       end
 
       if not article.is_identical? record
+        article.authors.clear
+        article.categories.clear
+        article.versions.clear
         article.update_attributes parse_arxiv_record(node)
         if not article.save
           print_article_errors(article)
