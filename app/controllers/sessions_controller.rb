@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
     # NOTES:
     #  - switch back to HTTP now that authentication is done
     #  - explicitly override any hash on the current URL
-    redirect_to "http://#{request.host_and_port}/#'
+    redirect_to "http://#{request.host_with_port}/#"
   end
 
   def destroy
