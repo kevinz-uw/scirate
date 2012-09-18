@@ -74,6 +74,19 @@ class Article < ActiveRecord::Base
 
     return true
   end
+
+  def as_json(options={})
+    result = super(options)
+    if options.include? :user
+      result['scited'] = false
+      rating = Rating.where(:user_id => options[:user].id)
+                     .where(:article_id => id).first
+      if rating and (rating.action == RATING_ACTION_SCITE)
+        result['scited'] = true
+      end
+    end
+    return result
+  end
 end
 
 class Author < ActiveRecord::Base

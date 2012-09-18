@@ -3,9 +3,10 @@ function ArticlesPage() { /* unused */ }
 $.extend(ArticlesPage.prototype, Page.prototype);
 
 // Records the list of articles for use displaying.
-ArticlesPage.prototype.initArticles = function(root, cursor) {
+ArticlesPage.prototype.initArticles = function(root, cursor, showScites) {
   this.root = root;
   this.cursor = cursor;
+  this.showScites = !!showScites;
 };
 
 ArticlesPage.prototype.display = function() {
@@ -93,35 +94,22 @@ ArticlesPage.prototype.attach = function() {
   $('A.scite').bind('click', function (evt) {
     evt.preventDefault();
     var article = that.findArticle($(evt.target).data('article'));
-    article.scited = true;
     article.expanded = false;
+    data.rateArticle(article, article.scited ? 0 : 4);
     that.redisplay();
-    that.rate(article, 4);
-  });
-  $('A.unscite').bind('click', function (evt) {
-    evt.preventDefault();
-    var article = that.findArticle($(evt.target).data('article'));
-    article.scited = false;
-    article.expanded = false;
-    that.redisplay();
-    that.rate(article, -1);
   });
   $('A.expand').bind('click', function (evt) {
     evt.preventDefault();
     var article = that.findArticle($(evt.target).data('article'));
-    article.expanded = true;
-    that.redisplay();
-    that.rate(article, 1);
-  });
-  $('A.collapse').bind('click', function (evt) {
-    evt.preventDefault();
-    var article = that.findArticle($(evt.target).data('article'));
-    article.expanded = false;
+    article.expanded = !article.expanded;
+    if (article.expanded) {
+      data.rateArticle(article, 1);
+    }
     that.redisplay();
   });
   $('A.arxiv').bind('click', function (evt) {
     var article = that.findArticle($(evt.target).data('article'));
-    that.rate(article, 2);
+    data.rateArticle(article, 2);
   });
 };
 
@@ -130,9 +118,7 @@ ArticlesPage.prototype.detach = function() {
   this.detachPager();
 
   $('A.scite').unbind('click');
-  $('A.unscite').unbind('click');
   $('A.expand').unbind('click');
-  $('A.collapse').unbind('click');
   $('A.arxiv').unbind('click');
 };
 
@@ -144,18 +130,4 @@ ArticlesPage.prototype.findArticle = function(id) {
     }
   }
   unexpectedCase('no such article: ' + id);
-};
-
-// Informs the server of a new rating.
-ArticlesPage.prototype.rate = function(article, rating) {
-  var data = getAuthData();
-  data['article_id'] = article.id;
-  data['rating_action'] = rating;
-  $.ajax({
-      url: '/ratings?format=json',
-      type: 'POST',
-      data: data,
-      dataType: 'json'
-    }).success($.noop)
-    .error(unexpectedServerError);
 };

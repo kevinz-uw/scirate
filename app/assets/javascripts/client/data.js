@@ -18,7 +18,7 @@ function Data() {
 Data.parseDates = function (obj, fields) {
   if ($.isArray(obj)) {
     for (var i = 0; i < obj.length; i++) {
-      Data._parseDates(obj[i], fields);
+      Data.parseDates(obj[i], fields);
     }
   } else {
     assert($.isPlainObject(obj));
@@ -27,6 +27,20 @@ Data.parseDates = function (obj, fields) {
       if (field in obj) {
         obj[field + '_date'] = new Date(Date.parse(obj[field]));
       }
+    }
+  }
+};
+
+// Replaces the accents in author names in the given articles.
+Data.replaceAccents = function(articles) {
+  for (var i = 0; i < articles.length; i++) {
+    var article = articles[i];
+    if (article.submitter) {
+      article.submitter = replaceAccents(article.submitter);
+    }
+    for (var j = 0; j < article.authors.length; j++) {
+      var author = article.authors[j];
+      author.name = replaceAccents(author.name);
     }
   }
 };
@@ -46,12 +60,12 @@ Data.prototype.hasNewArticles = function() {
 Data.prototype.setName = function(name) {
   this.user.name = name;
 
-  var data = getAuthData();
-  data['name'] = name;
+  var postData = getAuthData();
+  postData['name'] = name;
   $.ajax({
       url: '/user?format=json',
       type: 'PUT',
-      data: data,
+      data: postData,
       dataType: 'json'
     }).success($.noop)
     .error(unexpectedServerError);
@@ -61,12 +75,12 @@ Data.prototype.setName = function(name) {
 Data.prototype.setAllowEmail = function(allowEmail) {
   this.user.allowEmail = allowEmail;
 
-  var data = getAuthData();
-  data['allow_email'] = allowEmail;
+  var postData = getAuthData();
+  postData['allow_email'] = allowEmail;
   $.ajax({
       url: '/user?format=json',
       type: 'PUT',
-      data: data,
+      data: postData,
       dataType: 'json'
     }).success($.noop)
     .error(unexpectedServerError);
@@ -92,12 +106,12 @@ Data.prototype.addInterest = function(category, primary, completed) {
       completed();
 
       // Notify the server after the fact.
-      var data = getAuthData();
-      data['primary'] = primary;
+      var postData = getAuthData();
+      postData['primary'] = primary;
       $.ajax({
           url: '/interests/' + interest.id + '?format=json',
           type: 'POST',
-          data: data,
+          data: postData,
           dataType: 'json'
         }).success($.noop)
         .error(unexpectedServerError);
@@ -105,13 +119,13 @@ Data.prototype.addInterest = function(category, primary, completed) {
   } else {
     // We first need the server data (for last_seen and id0.
     var that = this;
-    var data = getAuthData();
-    data['category'] = category;
-    data['primary'] = primary;
+    var postData = getAuthData();
+    postData['category'] = category;
+    postData['primary'] = primary;
     $.ajax({
         url: '/interests?format=json',
         type: 'POST',
-        data: data,
+        data: postData,
         dataType: 'json'
       }).success(function (data, statusText, xhr) {
         // Now perform a local update.
@@ -162,6 +176,8 @@ Data.prototype._prepareInterest = function(interest) {
         dataType: 'json'
       }).success(function (data, statusText, xhr) {
         try {
+          Data.replaceAccents(data);
+
           interest.articles = data;
           if (interest.articlesListener) {
             interest.articlesListener(interest, data);
@@ -176,41 +192,40 @@ Data.prototype._prepareInterest = function(interest) {
 
 // Maximum number of articles to display at once. This is also used to
 // determine the amount to prefetch.
-Data.MAX_PAGE_SIZE = 50;
+Data.MAX_PAGE_SIZE = 25;
 
 // Number of pages to fetch at once.
-Data.PAGES_PER_FETCH = 2;
+Data.PAGES_PER_FETCH = 4;
 
-// Returns the articles matching the given query. Year and month are optional.
+// Returns the articles matching the given query. The window is the period of
+// time in which to return articles. These are both in seconds since the last
+// crawl (i.e., the maximum published time in the database).
+//
 // NOTE: We could prefetch these as well, but it's not clear that users will
 // very often page beyond the first set returned.
-Data.prototype.findArticles = function(category, year, month, firstIndex) {
-  var key = Data._makeQueryKey(category, year, month);
+Data.prototype.findArticles = function(
+    category, windowSize, windowOffset, firstIndex) {
+  var key = Data._makeQueryKey(category, windowSize, windowOffset);
   var cursor = this.queries[key];
   if (!cursor) {
     cursor = this.queries[key] = {articles: []};
   }
 
-  if (firstIndex + Data.MAX_PAGE_SIZE <= cursor.articles.length) {
+  if (cursor.done ||
+      (firstIndex + Data.MAX_PAGE_SIZE <= cursor.articles.length)) {
     return cursor;
   }
+  alert('not enough: length=' + cursor.articles.length + ' at=' + firstIndex);
 
   var limit = Math.max(
       firstIndex + Data.MAX_PAGE_SIZE - cursor.articles.length,
       Data.PAGES_PER_FETCH * Data.MAX_PAGE_SIZE);
 
-  var since, until;
-  if (year != null) {
-    if (month != null) {
-      var mon = (month < 10) ? '0' + month : '' + month;
-      var day = (DAYS[month] < 10) ? '0' + DAYS[month] : '' + DAYS[month];
-      since = year + '-' + mon + '-01 00:00:00 UTC';
-      until = year + '-' + mon + '-' + day + ' 23:59:59 UTC';
-    } else {
-      since = year + '-01-01 00:00:00 UTC';
-      until = year + '-12-31 23:59:59 UTC';
-    }
-  }
+  var sinceDate = new Date(maxPublished.getTime() -
+      1000 * (windowSize + windowOffset));
+  var untilDate = new Date(maxPublished.getTime() - 1000 * windowOffset);
+  var since = formatDate(sinceDate);
+  var until = formatDate(untilDate);
 
   var articles = cursor.articles;
   delete cursor.articles;  // indicates still loading
@@ -224,9 +239,14 @@ Data.prototype.findArticles = function(category, year, month, firstIndex) {
       dataType: 'json'
     }).success(function (data, statusText, xhr) {
       try {
+        Data.replaceAccents(data);
+
         if (!cursor.articles ||
-            (cursor.articles.length < articles.length + data.length)) {
-          cursor.articles = articles.concat(data);
+            (cursor.articles.length < firstIndex + data.length)) {
+          cursor.articles = articles.slice(0, firstIndex).concat(data);
+          if (data.length < limit) {
+            cursor.done = true;  // no reason to make more queries
+          }
         }
 
         if (cursor.articlesListener) {
@@ -239,19 +259,42 @@ Data.prototype.findArticles = function(category, year, month, firstIndex) {
     }).error(unexpectedServerError);
 
   return cursor;
-}; 
+};
 
-// Creates a unique key to describe the given query.
-Data._makeQueryKey = function(category, year, month) {
-  if (year) {
-    if (month) {
-      return category + '/' + year + '/' + month;
-    } else {
-      return category + '/' + year;
+// Changes the rating on the given article. This will also update the scite
+// count to take into account this scite.
+Data.prototype.rateArticle = function(article, rating) {
+  if (rating == 0) {
+    if (article.scited) {
+      article.scited = false;
+      article.scites -= 1;
+    }
+  } else if (rating == 4) {
+    if (!article.scited) {
+      article.scited = true;
+      article.scites = (article.scites ? article.scites : 0) + 1;
     }
   } else {
-    return category;
+    if (article.scited) {
+      return;  // this would be ignored, so don't send it
+    }
   }
+
+  var postData = getAuthData();
+  postData['article_id'] = article.id;
+  postData['rating_action'] = rating;
+  $.ajax({
+      url: '/ratings?format=json',
+      type: 'POST',
+      data: postData,
+      dataType: 'json'
+    }).success($.noop)
+    .error(unexpectedServerError);
+};
+
+// Creates a unique key to describe the given query.
+Data._makeQueryKey = function(category, windowSize, windowOffset) {
+  return category + '/' + windowSize + '/' + windowOffset;
 };
 
 // Maintain a singleton instance in the global variable 'data'.

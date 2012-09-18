@@ -12,6 +12,7 @@ one:
   acm_class: 
   published: 2009-11-30 12:00:00 UTC
   last_updated: 2009-11-30 12:00:00 UTC
+  scites: 0
 
 two:
   arxiv_id: "1201.4867"
@@ -27,3 +28,4 @@ two:
   acm_class: 
   published: 2012-01-23 12:00:00 UTC
   last_updated: 2012-01-23 12:00:00 UTC
+  scites: 0

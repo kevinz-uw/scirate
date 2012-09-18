@@ -5,26 +5,33 @@
        class="arxiv" data-article="{{>id}}"
        target="_blank">{{>arxiv_id}}</a></td>
     {{>title}}
+    {{if scites > 0}}
+      <span class="badge">
+        {{>scites}} {{> ~pluralize(scites, 'scite')}}</span>
+    {{/if}}
     {{if scited}}
       <span class="label label-highlight">
         <i class="icon-thumbs-up"></i></span>
     {{/if}}
   </dt>
   <dd>
-    Authors: {{> ~join(~pluck(authors, "name"), ", ")}}</br>
+    Authors: {{> ~join(~pluck(authors, "name"), ", ")}}<br>
     {{if expanded}}
-      <a class="collapse" href="#" data-article="{{>id}}">
+      <a class="expand" href="#" data-article="{{>id}}">
         <i class="icon-chevron-up"></i> Collapse</a>
-      <a class="scite" href="#" data-article="{{>id}}">
-        <i class="icon-thumbs-up"></i> Interesting</a>
-      <a class="unscite" href="#" data-article="{{>id}}">
-        <i class="icon-thumbs-down"></i> Dislike</a> (only affects me)<br>
-      Abstract: {{>abstract}}
     {{else}}
       <a class="expand" href="#" data-article="{{>id}}">
         <i class="icon-chevron-down"></i> Expand</a>
+    {{/if}}
+    {{if scited}}
       <a class="scite" href="#" data-article="{{>id}}">
-        <i class="icon-thumbs-up"></i> Interesting</a>
+        <i class="icon-thumbs-up"></i> Not Interesting</a><br>
+    {{else}}
+      <a class="scite" href="#" data-article="{{>id}}">
+        <i class="icon-thumbs-up"></i> Interesting</a><br>
+    {{/if}}
+    {{if expanded}}
+      Abstract: {{>abstract}}
     {{/if}}
   </dd>
   {{/for}}

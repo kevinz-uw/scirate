@@ -28,5 +28,15 @@ $.views.helpers({
     return DAYS[date.getDay()] + ', ' + date.getDate() + ' ' +
         MONTHS[date.getMonth()] + ' ' + date.getFullYear() + ' ' +
         date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
-  }
+  },
+
+  // Makes the string plural (only by adding s) if count is not 1.
+  pluralize: function(count, str) {
+    return (count == 1) ? str : str + 's';
+  },
+
+  // Returns the given string with the first character capitalized.
+  capitalize: function(str) {
+    return str[0].toUpperCase() + str.substring(1);
+  },
 });

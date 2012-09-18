@@ -7,6 +7,7 @@
 //= require jsrender-1.0.pre.js
 //= require bootstrap
 //= require templates.js
+//= require client/accents.js
 //= require client/assert.js
 //= require client/browser.js
 //= require client/client.js

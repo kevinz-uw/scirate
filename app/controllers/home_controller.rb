@@ -7,6 +7,7 @@ class HomeController < ApplicationController
 
     if user_signed_in
       @interests = Updates::interests_with_updates(current_user)
+      @max_published = Crawl.maximum(:max_published);
       render # index
     else
       render 'welcome'

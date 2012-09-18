@@ -2,84 +2,29 @@
   Articles {{>first_index}} &ndash; {{>last_index}} in {{>category}}\n from
   <span class="dropdown">
     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-      {{>yearStr}}
+      {{> time_frame_str}}
       <span class="caret"></span>
     </a>
     <ul class="dropdown-menu">
-      <li><a href="#browse/{{>category}}/0" class="year"
-             data-cat="0">any</a></li>
-      <li><a href="#browse/{{>category}}/2012/0"
-             class="year">2012</a></li>
-      <li><a href="#browse/{{>category}}/2011/0"
-             class="year">2011</a></li>
-      <li><a href="#browse/{{>category}}/2010/0"
-             class="year">2010</a></li>
-      <li><a href="#browse/{{>category}}/2009/0"
-             class="year">2009</a></li>
-      <li><a href="#browse/{{>category}}/2008/0"
-             class="year">2008</a></li>
-      <li><a href="#browse/{{>category}}/2007/0"
-             class="year">2007</a></li>
-      <li><a href="#browse/{{>category}}/2006/0"
-             class="year">2006</a></li>
-      <li><a href="#browse/{{>category}}/2005/0"
-             class="year">2005</a></li>
-      <li><a href="#browse/{{>category}}/2004/0"
-             class="year">2004</a></li>
-      <li><a href="#browse/{{>category}}/2003/0"
-             class="year">2003</a></li>
-      <li><a href="#browse/{{>category}}/2002/0"
-             class="year">2002</a></li>
-      <li><a href="#browse/{{>category}}/2001/0"
-             class="year">2001</a></li>
-      <li><a href="#browse/{{>category}}/2000/0"
-             class="year">2000</a></li>
-      <li><a href="#browse/{{>category}}/1999/0"
-             class="year">1999</a></li>
-      <li><a href="#browse/{{>category}}/1998/0"
-             class="year">1998</a></li>
-      <li><a href="#browse/{{>category}}/1997/0"
-             class="year">1997</a></li>
-      <li><a href="#browse/{{>category}}/1996/0"
-             class="year">1996</a></li>
-      <li><a href="#browse/{{>category}}/1995/0"
-             class="year">1995</a></li>
+      <li><a href="#browse/{{>category}}/today"
+             data-cat="today">Today</a></li>
+      <li><a href="#browse/{{>category}}/yesterday"
+             data-cat="yesterday">Yesterday</a></li>
+      <li><a href="#browse/{{>category}}/this-week"
+             data-cat="today">This Week</a></li>
+      <li><a href="#browse/{{>category}}/last-week"
+             data-cat="yesterday">Last Week</a></li>
+      <li><a href="#browse/{{>category}}/this-month"
+             data-cat="today">This Month</a></li>
+      <li><a href="#browse/{{>category}}/last-month"
+             data-cat="yesterday">Last Month</a></li>
+      <li><a href="#browse/{{>category}}/this-year"
+             data-cat="today">This Year</a></li>
+      <li><a href="#browse/{{>category}}/last-year"
+             data-cat="yesterday">Last Year</a></li>
     </ul>
   </span>
-  {{if (month >= 0) || (year >= 0)}}
-  <span class="dropdown">
-    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-      {{>monthStr}}
-      <span class="caret"></span>
-    </a>
-    <ul class="dropdown-menu">
-      <li><a href="#browse/{{>category}}/{{>year}}/0"
-             class="month">any</a></li>
-      <li><a href="#browse/{{>category}}/{{>year}}/1/0"
-             class="month">January</a></li>
-      <li><a href="#browse/{{>category}}/{{>year}}/2/0"
-             class="month">February</a></li>
-      <li><a href="#browse/{{>category}}/{{>year}}/3/0"
-             class="month">March</a></li>
-      <li><a href="#browse/{{>category}}/{{>year}}/4/0"
-             class="month">April</a></li>
-      <li><a href="#browse/{{>category}}/{{>year}}/5/0"
-             class="month">May</a></li>
-      <li><a href="#browse/{{>category}}/{{>year}}/6/0"
-             class="month">June</a></li>
-      <li><a href="#browse/{{>category}}/{{>year}}/7/0"
-             class="month">July</a></li>
-      <li><a href="#browse/{{>category}}/{{>year}}/8/0"
-             class="month">August</a></li>
-      <li><a href="#browse/{{>category}}/{{>year}}/9/0"
-             class="month">September</a></li>
-      <li><a href="#browse/{{>category}}/{{>year}}/10/0"
-             class="month">October</a></li>
-      <li><a href="#browse/{{>category}}/{{>year}}/11/0"
-             class="month">November</a></li>
-      <li><a href="#browse/{{>category}}/{{>year}}/12/0"
-             class="month">December</a></li>
-    </ul>
-  </span>
-  {{/if}}
 </h1>
+<p style="margin-top: -10px;">
+  <small>Sorted by (scites, published date)</small>
+</p>

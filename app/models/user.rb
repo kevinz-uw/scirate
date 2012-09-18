@@ -52,12 +52,13 @@ end
 
 # We keep track of the maximum of the following types of actions, which
 # indicate strengths of rating.
-RATING_ACTION_UNSCITE = -1
+RATING_ACTION_DISLIKE = -4
 RATING_ACTION_SEEN = 0
 RATING_ACTION_EXPAND = 1
 RATING_ACTION_ARXIV = 2
 RATING_ACTION_PDF = 3
 RATING_ACTION_SCITE = 4
+RATING_ACTION_MAXIMUM = 4
 
 # User's rating of an individual article.
 class Rating < ActiveRecord::Base

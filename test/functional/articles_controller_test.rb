@@ -97,4 +97,31 @@ class ArticlesControllerTest < ActionController::TestCase
     assert_equal '1201.4867', results[0]['arxiv_id']
     assert_equal '0911.5596', results[1]['arxiv_id']
   end
+
+  test "scited" do
+    article = Article.find_by_arxiv_id('1201.4867')
+
+    get :index, {:format => 'json', :category => 'quant-ph',
+         :since => '2009-11-30 12:00:00 UTC', :offset => 0, :limit => 10},
+        {:user_id => @user.id}
+    assert_response :success
+    results = JSON.parse(@response.body)
+    assert_equal 1, results.length
+    assert_equal article.arxiv_id, results[0]['arxiv_id']
+    assert_equal false, results[0]['scited']
+
+    rating = Rating.where(:user_id => @user.id, :article_id => article.id)
+                   .first!
+    rating.action = 4
+    rating.save!
+
+    get :index, {:format => 'json', :category => 'quant-ph',
+         :since => '2009-11-30 12:00:00 UTC', :offset => 0, :limit => 10},
+        {:user_id => @user.id}
+    assert_response :success
+    results = JSON.parse(@response.body)
+    assert_equal 1, results.length
+    assert_equal article.arxiv_id, results[0]['arxiv_id']
+    assert_equal true, results[0]['scited']
+  end
 end

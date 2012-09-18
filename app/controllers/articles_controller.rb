@@ -44,9 +44,10 @@ class ArticlesController < ApplicationController
     end
 
     respond_to do |format|
-      format.json { render :json => articles.to_json(:include => {
-        :authors => { :only => [:name, :institution] }
-      }) }
+      format.json { render :json => articles.to_json(
+        :include => { :authors => { :only => [:name, :institution] } },
+        :user => current_user,
+      ) }
     end
 
     end_time = Time.now

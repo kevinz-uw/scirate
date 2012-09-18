@@ -33,6 +33,8 @@ class JsRenderTemplate < Tilt::Template
       line3 = line2.rstrip
       if line3.length > 0
         indent = ' ' * (line.length - line2.length)
+        line3.gsub!(/\\/) { |s| '\\\\' }
+        line3.gsub!(/\'/) { |s| '\\\'' }
         lines << "  #{indent}'#{line3}\\n' +"
       end
     end

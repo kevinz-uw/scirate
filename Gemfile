@@ -33,5 +33,5 @@ group :assets do
   gem 'jquery-rails'
 
   # User Twitter's Bootstrap library for CSS.
-  gem 'bootstrap-sass'
+  gem 'bootstrap-sass', '>= 2.1.0'
 end

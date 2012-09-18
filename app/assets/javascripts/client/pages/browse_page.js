@@ -1,59 +1,71 @@
+var DAYS = 24 * 60 * 60;
+
 function BrowsePage(root, params) {
   this.category = params[0];
-  this.year = -1;
-  this.month = -1;
-  this.firstIndex = 0;
+  this.timeFrame = (params.length > 1 ? params[1] : 'today');
+  this.firstIndex = (params.length > 2 ? parseInt(params[2]) : 0);
 
-  var cursor;
-  if (params.length == 1) {
-    cursor = data.findArticles(this.category, null, null, this.firstIndex);
-  } else if (params.length == 2) {
-    this.firstIndex = parseInt(params[1]);
-    cursor = data.findArticles(this.category, null, null, this.firstIndex);
-  } else if (params.length == 3) {
-    this.year = parseInt(params[1]);
-    this.firstIndex = parseInt(params[2]);
-    cursor = data.findArticles(this.category, this.year, null, this.firstIndex);
-  } else if (params.length == 4) {
-    this.year = parseInt(params[1]);
-    this.month = parseInt(params[2]);
-    this.firstIndex = parseInt(params[3]);
-    cursor = data.findArticles(
-        this.category, this.year, this.month, this.firstIndex);
+  var windowSize = 0, windowOffset = 0;
+  if (this.timeFrame == 'today') {
+    windowSize = 1 * DAYS;
+  } else if (this.timeFrame == 'yesterday') {
+    windowSize = 1 * DAYS;
+    windowOffset = windowSize;
+  } else if (this.timeFrame == 'this-week') {
+    windowSize = 7 * DAYS;
+  } else if (this.timeFrame == 'last-week') {
+    windowSize = 7 * DAYS;
+    windowOffset = windowSize;
+  } else if (this.timeFrame == 'this-month') {
+    windowSize = 30 * DAYS;
+  } else if (this.timeFrame == 'last-month') {
+    windowSize = 30 * DAYS;
+    windowOffset = windowSize;
+  } else if (this.timeFrame == 'this-year') {
+    windowSize = 365 * DAYS;
+  } else if (this.timeFrame == 'last-year') {
+    windowSize = 365 * DAYS;
+    windowOffset = windowSize;
   } else {
-    unexpectedCase("too many params for browse");
+    alert('unknown time frame: "' + this.timeFrame + '"');
+    windowSize = 1 * DAYS;
   }
 
-  this.initArticles(root, cursor);
+  var cursor = data.findArticles(
+      this.category, windowSize, windowOffset, this.firstIndex);
 
-  LogEvent('client/browse', undefined,
-      {'year': this.year, 'month': this.month});
+  this.initArticles(root, cursor, true);
+
+  if (this.firstIndex > 0) {
+    LogEvent('client/browse', undefined, {'timeFrame': this.timeFrame});
+  }
 }
 
 $.extend(BrowsePage.prototype, ArticlesPage.prototype);
+
+BrowsePage.TIMEFRAME_STR = {
+  'today': 'Today',
+  'yesterday': 'Yesterday',
+  'this-week': 'This Week',
+  'last-week': 'Last Week',
+  'this-month': 'This Month',
+  'last-month': 'Last Month',
+  'this-year': 'This Year',
+  'last-year': 'Last Year',
+};
 
 BrowsePage.prototype.displayHeader = function(elem, firstIndex, lastIndex) {
   elem.html(browseHeaderTemplate.render({
     category: this.category,
     first_index: firstIndex + 1,
     last_index: lastIndex + 1,
-    year: this.year,
-    yearStr: (this.year >= 0) ? '' + this.year : "Any year",
-    month: this.month,
-    monthStr: (this.month > 0) ? MONTH[this.month] : "Any month"
+    time_frame_str: BrowsePage.TIMEFRAME_STR[this.timeFrame],
   }));
 };
 
 BrowsePage.prototype.displayPager = function(
       elem, firstIndex, lastIndex, atEnd) {
-  var urlPrefix = '#browse/' + this.category + '/';
-  if (this.year >= 0) {
-    urlPrefix += this.year + '/';
-    if (this.month > 0) {
-      urlPrefix += this.month + '/';
-    }
-  }
-
+  var urlPrefix = '#browse/' + this.category + '/' + this.timeFrame + '/';
   elem.html(browsePagerTemplate.render({
     category: this.category,
     first_index: firstIndex + 1,

@@ -16,6 +16,25 @@ function describeDateDifferenceInDays(d1, d2) {
   return Math.floor(delta_days) + ' days ago';
 }
 
+// Returns the date as a string formatted in the server-expected manner.
+function formatDate(d) {
+  return d.getUTCFullYear() + '-' +
+      makeTwoDigits(d.getUTCMonth() + 1) + '-' +
+      makeTwoDigits(d.getUTCDate()) + ' ' +
+      makeTwoDigits(d.getUTCHours()) + ':' +
+      makeTwoDigits(d.getUTCMinutes()) + ':' +
+      makeTwoDigits(d.getUTCSeconds()) + ' UTC';
+}
+
+// Formats the given number as two digits, padding with zeros.
+function makeTwoDigits(num) {
+  if (num < 10) {
+    return '0' + num;
+  } else {
+    return '' + num;
+  }
+}
+
 // Map month numbers to their names.
 var MONTH = {
   1: 'January',
