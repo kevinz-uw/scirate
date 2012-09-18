@@ -10,7 +10,8 @@ class SessionsController < ApplicationController
 
     Logging::log_event('server/login', user, {:provider => params[:provider]})
 
-    redirect_to root_url + '#'  # ensure there is no hash from the provider
+    redirect_to root_url + '#',  # ensure there is no hash from the provider
+        :protocol => 'http://'
   end
 
   def destroy

@@ -10,6 +10,16 @@ class HomeController < ApplicationController
       @max_published = Crawl.maximum(:max_published);
       render # index
     else
+      @auth_url_google = '/auth/google_oauth2'
+      if ENV.include? 'GOOGLE_HTTPS'
+        @auth_url_google =
+            "https://#{request.host_with_port}#{@auth_url_google}"
+      end
+      @auth_url_facebook = '/auth/facebook'
+      if ENV.include? 'FACEBOOK_HTTPS'
+        @auth_url_facebook =
+            "https://#{request.host_with_port}#{@auth_url_facebook}"
+      end
       render 'welcome'
     end
 
