@@ -10,8 +10,10 @@ class SessionsController < ApplicationController
 
     Logging::log_event('server/login', user, {:provider => params[:provider]})
 
-    redirect_to root_url + '#',  # ensure there is no hash from the provider
-        :protocol => 'http://'
+    # NOTES:
+    #  - switch back to HTTP now that authentication is done
+    #  - explicitly override any hash on the current URL
+    redirect_to "http://#{request.host_and_port}/#'
   end
 
   def destroy
