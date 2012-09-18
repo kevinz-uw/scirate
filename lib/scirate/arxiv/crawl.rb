@@ -76,6 +76,7 @@ module Arxiv
                        .find_by_arxiv_id(record[:arxiv_id])
       if not article
         article = Article.new(parse_arxiv_record(node))
+        article.scites = 0  # initially unscited
         if not article.save
           print_article_errors(article)
       end

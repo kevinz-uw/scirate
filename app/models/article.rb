@@ -3,13 +3,15 @@ class Article < ActiveRecord::Base
       :doi, :journal_ref, :report_no, :msc_class, :acm_class,
       :authors_attributes, :submitter,
       :categories_attributes, :primary_category,
-      :versions_attributes, :published, :last_updated
+      :versions_attributes, :published, :last_updated,
+      :scites
 
   validates :arxiv_id, :presence => true, :length => {:in => 7..50}
   validates :title, :presence => true
   validates :primary_category, :presence => true, :length => {:maximum => 50}
   validates :published, :presence => true
   validates :last_updated, :presence => true
+  validates :scites, :presence => true
 
   has_many :authors, :autosave => true, :validate => true,
       :dependent => :destroy, :inverse_of => :article

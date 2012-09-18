@@ -13,4 +13,12 @@ namespace :arxiv do
     end_time = Time.now
     Logging::log_event('task/arxiv/crawl', nil, end_time - start_time, {})
   end
+
+  desc "Clean up the scites column."
+  task :add_missing_scites_defaults => :environment do
+    Article.where('scites IS NULL').each do |article|
+      article.scites = 0
+      article.save!
+    end
+  end
 end
