@@ -215,7 +215,6 @@ Data.prototype.findArticles = function(
       (firstIndex + Data.MAX_PAGE_SIZE <= cursor.articles.length)) {
     return cursor;
   }
-  alert('not enough: length=' + cursor.articles.length + ' at=' + firstIndex);
 
   var limit = Math.max(
       firstIndex + Data.MAX_PAGE_SIZE - cursor.articles.length,
