@@ -24,7 +24,7 @@ class AnalyticsController < ApplicationController
     @num_arxiv_ratings = Rating.where("action = #{RATING_ACTION_ARXIV}").count
     @num_expand_ratings = Rating.where("action = #{RATING_ACTION_EXPAND}").count
     @num_dislike_ratings =
-        Rating.where("action = #{RATING_ACTION_UNSCITE}").count
+        Rating.where("action = #{RATING_ACTION_DISLIKE}").count
 
     @categories = []
     Interest.select(:category).uniq.each do |x|
